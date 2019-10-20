@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="view_sales_order_filter_quotation" model="ir.ui.view">
+        <field name="name">sale.order.quotation.search.view</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+        <field name="mode">primary</field> 
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='my_sale_orders_filter']" position="replace">
+                <filter string="From Website Quotation" name="from_website_quotation" domain="[('website_id', '=', 'My Website')]"/>
+                <separator/>
+            </xpath>
+        </field>
+    </record>
+
+	<record id="action_view_website_quotation" model="ir.actions.act_window">
+        <field name="name">Website Quotation</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">tree,form,kanban,activity</field>
+        <field name="context">{'show_sale': True, 'search_default_from_website_quotation': 1}</field>
+        <field name="search_view_id" ref="view_sales_order_filter_quotation"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                There is no website quotation order from the website
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_orders_website_quotation_orders" name="Quotation"
+        action="action_view_website_quotation"
+        parent="website_sale.menu_orders" sequence="5"/>
+
+</odoo>

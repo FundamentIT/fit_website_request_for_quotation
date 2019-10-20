@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="assets_frontend_for_quote" inherit_id="website.assets_frontend">
+        <xpath expr="." position="inside">
+            <script type="text/javascript" src="/fit_website_request_for_quotation/static/src/js/modal.js"></script>
+        </xpath>
+    </template>
+
+    <template id="Quotation" name='request for quotation' inherit_id="website_sale.product">
+        <xpath expr="//div[hasclass('js_main_product')]" position="inside">
+            <t t-if="product.website_request_quote == True">
+                <a role="button" t-if='not quote_sent' class="btn btn-secondary btn-lg mt8" id="get_quote"
+                   style="color: white !important;">Get Quotation</a>
+            </t>
+            <div>
+                <div role="dialog" id="modal_get_quote" class="modal get_quote_modal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class='form'>
+                                <style>
+                                    .company:valid {
+                                      border-color: green;
+                                    }
+                                    .company:invalid {
+                                      border-color: red;
+                                    }
+                                    .contact:valid {
+                                      border-color: green;
+                                    }
+                                    .contact:invalid {
+                                      border-color: red;
+                                    }
+                                    .telephone:valid {
+                                      border-color: green;
+                                    }
+                                    .telephone:invalid {
+                                      border-color: red;
+                                    }
+                                    .email:valid {
+                                      border-color: green;
+                                    }
+                                    .email:invalid {
+                                      border-color: red;
+                                    }
+                                    .qty:valid {
+                                      border-color: green;
+                                    }
+                                    .qty:invalid {
+                                      border-color: red;
+                                    }
+
+                                </style>
+                                <form role="form" id="quote_form">
+                                    <header class="modal-header">
+                                        <h3 class="modal-title">Request For Quotation</h3>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">&amp;times;</button>
+                                    </header>
+                                    <main class="modal-body">
+                                        <p class="alert track_error alert-danger o_hidden" id="validation_error">Please fill in all
+                                        mandatory fields.</p>
+                                        <div id="is_public_user" style="display:none;"><t t-if="website.user_id == user_id">true</t></div>
+
+                                        <t t-if="website.user_id == user_id">
+                                            <span>Company *</span>
+                                            <input name='company' type="string" id="company" required="required"
+                                                   class="form-control company col-md-6"/>
+                                            <span>Contact *</span>
+                                            <input name='contact' type="string" id="contact" required="required"
+                                                   class="form-control contact col-md-6"/>
+                                            <span>Telephone number *</span>
+                                            <input name='telephone' type="string" id="telephone" required="required"
+                                                   class="form-control telephone col-md-6"/>
+                                            <span>Email *</span>
+                                            <input name='email' type="email" id="email" required="required"
+                                                   class="form-control email col-md-6"/>
+                                        </t>
+                                        <t t-if="website.user_id != user_id">
+                                            <input name='company' type="string" id="company" required="required"
+                                                   class="form-control company o_hidden col-md-6"/>
+                                            <input name='contact' type="string" id="contact" required="required"
+                                                   class="form-control contact o_hidden col-md-6"/>
+                                            <input name='telephone' type="string" id="telephone" required="required"
+                                                   class="form-control telephone o_hidden col-md-6"/>
+                                            <input name='email' type="email" id="email" required="required"
+                                                   class="form-control email o_hidden col-md-6"/>
+                                        </t>
+                                        <input name='product_id' id="product_id" type="hidden" class="form-control"
+                                               t-att-value="product_variant.id"/>
+                                        <span>Quantity *</span>
+                                        <input name='qty' type="number" id="qty" value="1" min="1" class="form-control qty col-md-3"/>
+                                        <p id="message"/>
+                                        <span>Message</span>
+                                        <textarea name='message' class="form-control message" rows="5"></textarea>
+
+                                    </main>
+                                    <footer class="modal-footer">
+                                        <button type="button" id="getquote" data-product-id="product_id" class="btn btn-primary"
+                                                special="save">
+                                            <a t-attf-href="/shop/product/#{ slug(product) }?quote_sent=True" style="color:white !important;">Get
+                                                Quote
+                                            </a>
+                                        </button>
+                                    </footer>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+        <xpath expr="//a[@id='get_quote']" position="before">
+            <t t-if='quote_sent'>
+                <p class="alert track_error mt32 alert-success">We Received your request, our sales Team Contact You soon for Quotation.</p>
+            </t>
+        </xpath>
+    </template>
+</odoo>
